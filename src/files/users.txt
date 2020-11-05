@@ -1,0 +1,4 @@
+Peter Petrov;admin;hotel_admin@gmail.com;admin;ADMIN
+David Paul;paveline;davpaul@gmail.com;123456;USER
+Radyno;mir;mir@bsu.by;hdfuudhu;USER
+fduh;nfndfudh;nfdnuu@gmail.com;5756356626;USER
