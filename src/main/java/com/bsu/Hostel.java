@@ -56,4 +56,3 @@ public class Hostel {
         return openingDate;
     }
 }
-

@@ -3,6 +3,7 @@ package main.java.com.bsu;
 import java.io.FileWriter;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class RequestProcessor {
@@ -34,16 +35,14 @@ public class RequestProcessor {
 
     }
 
-    public static boolean addUser(List<User> users, FileWriter writer, Scanner scanner) {
+    public static boolean addUser(Map<String, User> users, FileWriter writer, Scanner scanner) {
         System.out.println("Enter username:");
         String username = scanner.nextLine();
         System.out.println("Enter login:");
         String login = scanner.nextLine();
-        for (User user : users) {
-            if (login.equals(user.getLogin())) {
-                System.out.println("Can't add user(this login is already taken)");
-                return false;
-            }
+        if (users.containsKey(login)) {
+            System.out.println("Can't add user(this login is already taken)");
+            return false;
         }
         System.out.println("Enter email:");
         String email = scanner.nextLine();
@@ -56,22 +55,24 @@ public class RequestProcessor {
             System.out.println("Can't add user");
             return false;
         }
-        users.add(newUser);
+        users.put(newUser.getLogin(), newUser);
         return true;
     }
 
-    public static User login(List<User> users, Scanner scanner) {
+    public static User login(Map<String, User> users, Scanner scanner) {
         System.out.println("Enter login:");
         String login = scanner.nextLine();
-        System.out.println("Enter password:");
-        String password = scanner.nextLine();
-        for (User user : users) {
-            if (login.equals(user.getLogin()) && password.equals(user.getPassword())) {
-                System.out.println("Welcome " + user.getUsername());
+        if (!users.containsKey(login)) {
+            System.out.println("Unknown username. Try again");
+            return new User("", "", "", "", "USER");
+        } else {
+            User user = users.get(login);
+            System.out.println("Enter password:");
+            String password = scanner.nextLine();
+            if (user.getPassword().equals(password))
                 return user;
-            }
         }
-        System.out.println("Try again");
+        System.out.println("Wrong Password. Try again");
         return new User("", "", "", "", "USER");
     }
 
@@ -110,7 +111,7 @@ public class RequestProcessor {
     public static void topHotels(List<Hostel> hostels, LocalDate lb, LocalDate ub, int n) {
         hostels.stream().sorted((o1, o2) -> o2.getRank() - o1.getRank()).filter(hostel -> {
             LocalDate od = hostel.getOpeningDate();
-            if ((od.compareTo(lb) >= 0) && (od.compareTo(ub) <= 0)){
+            if ((od.compareTo(lb) >= 0) && (od.compareTo(ub) <= 0)) {
                 return true;
             }
             return false;

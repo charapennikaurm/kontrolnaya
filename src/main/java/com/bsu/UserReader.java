@@ -2,9 +2,7 @@ package main.java.com.bsu;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class UserReader {
     private File file;
@@ -13,18 +11,18 @@ public class UserReader {
         this.file = file;
     }
 
-    public List<User> readAllRecords() {
-        List<User> records = new ArrayList<>();
+    public Map<String,User> readAllRecords() {
+        Map<String,User> records = new HashMap<>();
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
-                records.add(buildRecord(scanner.nextLine()));
+                User user = buildRecord(scanner.nextLine());
+                records.put(user.getLogin(),user);
             }
         } catch (FileNotFoundException exception) {
             System.out.println("Can't find file with user info");
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
-
         return records;
     }
 
