@@ -2,10 +2,8 @@ package main.java.com.bsu;
 
 import java.io.FileWriter;
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
-import java.util.function.Predicate;
 
 public class RequestProcessor {
     enum Request {
@@ -79,7 +77,7 @@ public class RequestProcessor {
 
     public static void showAllHostelRecords(List<Hostel> hostels) {
         for (Hostel hostel : hostels) {
-            System.out.println(hostel.toString());
+            System.out.println(hostel);
         }
     }
 
@@ -110,20 +108,12 @@ public class RequestProcessor {
     }
 
     public static void topHotels(List<Hostel> hostels, LocalDate lb, LocalDate ub, int n) {
-        hostels.stream().sorted(new Comparator<Hostel>() {
-            @Override
-            public int compare(Hostel o1, Hostel o2) {
-                return o2.getRank() - o1.getRank();
+        hostels.stream().sorted((o1, o2) -> o2.getRank() - o1.getRank()).filter(hostel -> {
+            LocalDate od = hostel.getOpeningDate();
+            if ((od.compareTo(lb) >= 0) && (od.compareTo(ub) <= 0)){
+                return true;
             }
-        }).filter(new Predicate<Hostel>() {
-            @Override
-            public boolean test(Hostel hostel) {
-                LocalDate od = hostel.getOpeningDate();
-                if ((od.compareTo(lb) >= 0) && (od.compareTo(ub) <= 0)){
-                    return true;
-                }
-                return false;
-            }
+            return false;
         }).limit(n).forEach(System.out::println);
     }
 }
