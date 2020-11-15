@@ -109,12 +109,8 @@ public class RequestProcessor {
     }
 
     public static void topHotels(List<Hostel> hostels, LocalDate lb, LocalDate ub, int n) {
-        hostels.stream().sorted((o1, o2) -> o2.getRank() - o1.getRank()).filter(hostel -> {
-            LocalDate od = hostel.getOpeningDate();
-            if ((od.compareTo(lb) >= 0) && (od.compareTo(ub) <= 0)) {
-                return true;
-            }
-            return false;
-        }).limit(n).forEach(System.out::println);
+        hostels.stream().sorted((o1, o2) -> o2.getRank() - o1.getRank()).
+                filter(h -> h.getOpeningDate().compareTo(lb) >= 0 && h.getOpeningDate().compareTo(ub) <= 0)
+                .limit(n).forEach(System.out::println);
     }
 }
